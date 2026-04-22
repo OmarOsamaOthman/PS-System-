@@ -56,6 +56,18 @@ body {
     line-height: 1.6;
 }
 
+.site-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.title-icon {
+    width: 32px;
+    height: 32px;
+}
+
 .topbar {
     max-width: 1300px;
     margin: 0 auto 24px;
@@ -652,4 +664,35 @@ tr:nth-child(even) {
     border-color: var(--primary);
     box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.18);
     background: #243246;
+}
+
+.site-footer {
+    margin-top: 50px;
+    border-top: 1px solid var(--border);
+    padding-top: 20px;
+}
+
+.footer-content {
+    max-width: 1300px;
+    margin: auto;
+    text-align: center;
+    color: var(--text-soft);
+    font-size: 15px;
+    line-height: 1.8;
+}
+
+.footer-link {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: bold;
+    transition: var(--transition);
+}
+
+.footer-link:hover {
+    color: var(--primary-hover);
+    text-decoration: underline;
+}
+
+.footer-link:active {
+    color: var(--primary-active);
 }
