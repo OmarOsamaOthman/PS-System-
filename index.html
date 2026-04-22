@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ar">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>إدارة محل البلايستيشن</title>
+  <link rel="stylesheet" href="styling.css" />
+</head>
+
+<body>
+  <header class="topbar">
+    <h1>🎮 إدارة محل البلايستيشن</h1>
+    <a class="link-btn" href="settings.html">الإعدادات</a>
+  </header>
+
+  <section id="devices" class="devices-grid"></section>
+
+  <section class="panel total-panel">
+    <h2>💰 إجمالي اليوم: <span id="total">0</span> جنيه</h2>
+    <button class="danger" onclick="resetDay()">تصفير اليوم</button>
+  </section>
+
+  <section class="panel">
+    <h2>📋 سجل الجلسات</h2>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>الجهاز</th>
+            <th>النوع</th>
+            <th>الفئة</th>
+            <th>من</th>
+            <th>إلى</th>
+            <th>المدة</th>
+            <th>السعر</th>
+            <th>تفاصيل</th>
+          </tr>
+        </thead>
+        <tbody id="historyBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <div id="paymentModal" class="modal hidden">
+    <div class="modal-box small-modal">
+      <div class="modal-head">
+        <h3>🧾 إنهاء الجلسة</h3>
+        <button class="icon-btn danger" onclick="closePaymentModal()">✕</button>
+      </div>
+
+      <div id="sessionSummary" class="modal-scroll"></div>
+
+      <div class="payment-box">
+        <p>الإجمالي المطلوب: <strong><span id="finalAmount">0</span> جنيه</strong></p>
+
+        <label for="paidAmount">المبلغ المستلم</label>
+        <input id="paidAmount" type="number" placeholder="اكتب المبلغ المستلم" oninput="calculateChange()" />
+
+        <p>الباقي: <strong><span id="changeAmount">0</span> جنيه</strong></p>
+        <p id="paymentError" class="error-text"></p>
+      </div>
+
+      <div class="modal-actions sticky-actions">
+        <button class="primary" onclick="confirmPayment()">تأكيد الدفع</button>
+        <button class="gray" onclick="closePaymentModal()">إلغاء</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="logic.js"></script>
+</body>
+
+</html>

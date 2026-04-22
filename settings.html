@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ar">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الإعدادات</title>
+    <link rel="stylesheet" href="styling.css">
+</head>
+
+<body>
+
+    <header class="topbar">
+        <h1>⚙️ الإعدادات</h1>
+        <a class="link-btn" href="index.html">الرجوع للتشغيل</a>
+    </header>
+
+
+    <section class="stats-grid">
+
+        <div class="stat-card">
+            <p>عدد الأجهزة</p>
+            <h3 id="devicesCount">0</h3>
+        </div>
+
+        <div class="stat-card">
+            <p>عدد أنواع المشروبات</p>
+            <h3 id="drinksTypesCount">0</h3>
+        </div>
+
+        <div class="stat-card">
+            <p>إجمالي الوحدات بالمخزون</p>
+            <h3 id="drinksStockCount">0</h3>
+        </div>
+
+    </section>
+
+
+    <section class="panel">
+
+        <h2>أسعار الأجهزة</h2>
+
+        <div class="settings-grid">
+
+            <div class="price-card">
+
+                <h3>PS4</h3>
+
+                <div class="field">
+                    <label>سعر العادي</label>
+                    <input id="ps4Normal" type="number">
+                </div>
+
+                <div class="field">
+                    <label>سعر الملتي</label>
+                    <input id="ps4Multi" type="number">
+                </div>
+
+            </div>
+
+
+            <div class="price-card">
+
+                <h3>PS5</h3>
+
+                <div class="field">
+                    <label>سعر العادي</label>
+                    <input id="ps5Normal" type="number">
+                </div>
+
+                <div class="field">
+                    <label>سعر الملتي</label>
+                    <input id="ps5Multi" type="number">
+                </div>
+
+            </div>
+
+        </div>
+
+        <button class="primary" onclick="savePrices()">
+            حفظ الأسعار
+        </button>
+
+    </section>
+
+
+    <section class="panel">
+
+        <h2>إضافة جهاز</h2>
+
+        <div class="settings-grid">
+
+            <div class="field">
+                <label>اسم الجهاز</label>
+                <input id="deviceName">
+            </div>
+
+            <div class="field">
+                <label>نوع الجهاز</label>
+
+                <select id="deviceType">
+                    <option value="PS4">PS4</option>
+                    <option value="PS5">PS5</option>
+                </select>
+
+            </div>
+
+
+            <div class="field field-button">
+                <label>&nbsp;</label>
+
+                <button class="primary" onclick="addDevice()">
+
+                    إضافة جهاز
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section class="panel">
+
+        <h2>إدارة الأجهزة</h2>
+
+        <div id="devicesSettingsList"></div>
+
+    </section>
+
+
+    <section class="panel">
+
+        <h2>إضافة مشروب</h2>
+
+        <div class="settings-grid">
+
+            <div class="field">
+                <label>اسم المشروب</label>
+                <input id="drinkName">
+            </div>
+
+            <div class="field">
+                <label>السعر</label>
+                <input id="drinkPrice" type="number">
+            </div>
+
+            <div class="field">
+                <label>الكمية المتاحة</label>
+                <input id="drinkStock" type="number">
+            </div>
+
+
+            <div class="field field-button">
+                <label>&nbsp;</label>
+
+                <button class="primary" onclick="addDrink()">
+
+                    إضافة مشروب
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section class="panel">
+
+        <h2>إدارة المشروبات</h2>
+
+        <div id="drinksSettingsList"></div>
+
+    </section>
+
+
+    <div id="toast" class="toast hidden">
+
+    </div>
+
+
+    <script src="settings.js"></script>
+
+</body>
+
+</html>
