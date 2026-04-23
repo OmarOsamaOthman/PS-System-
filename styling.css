@@ -579,6 +579,34 @@ tr:nth-child(even) {
     background: linear-gradient(135deg, #1d4ed8, #2563eb);
 }
 
+
+.quick-list {
+    margin-top: 16px;
+}
+
+.quick-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 14px;
+    margin-top: 10px;
+}
+
+.quick-total-box {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+}
+
+.quick-total-box p {
+    margin: 0 0 12px;
+    color: var(--text);
+}
+
 @media (max-width: 640px) {
     body {
         padding: 16px;

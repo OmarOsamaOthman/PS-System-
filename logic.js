@@ -17,6 +17,8 @@ let drinksList = JSON.parse(localStorage.getItem("drinksList")) || [
     { id: 2, name: "بيبسي", price: 15, stock: 8 }
 ];
 
+let quickDrinksCart = [];
+
 let sessionsHistory = JSON.parse(localStorage.getItem("sessionsHistory")) || [];
 let total = Number(localStorage.getItem("total")) || 0;
 let pendingPayment = null;
@@ -43,6 +45,8 @@ function formatDuration(ms) {
     const s = totalSec % 60;
     return `${h}س ${m}د ${s}ث`;
 }
+
+
 
 function getModePrice(deviceType, mode) {
     if (mode === "عادي") return Number(appSettings.prices[deviceType].normal);
@@ -437,6 +441,157 @@ function confirmPayment() {
     document.getElementById("paymentModal").classList.add("hidden");
 }
 
+function renderQuickDrinksOptions() {
+    const select = document.getElementById("quickDrinkSelect");
+    if (!select) return;
+
+    const available = drinksList.filter(d => Number(d.stock) > 0);
+
+    if (!available.length) {
+        select.innerHTML = `<option value="">لا يوجد مشروبات متاحة</option>`;
+        return;
+    }
+
+    select.innerHTML = available.map(drink => `
+    <option value="${drink.id}">
+      ${drink.name} - ${drink.price} جنيه (متاح: ${drink.stock})
+    </option>
+  `).join("");
+}
+
+function addQuickDrink() {
+    const select = document.getElementById("quickDrinkSelect");
+    const qtyInput = document.getElementById("quickDrinkQty");
+
+    if (!select || !qtyInput) return;
+
+    const drinkId = Number(select.value);
+    const qty = Number(qtyInput.value) || 1;
+
+    const drink = drinksList.find(d => d.id === drinkId);
+    if (!drink) return;
+
+    if (qty <= 0) {
+        showToast?.("العدد لازم يكون أكبر من صفر", "danger");
+        return;
+    }
+
+    if (qty > drink.stock) {
+        alert(`المتاح فقط من ${drink.name}: ${drink.stock}`);
+        return;
+    }
+
+    const existing = quickDrinksCart.find(item => item.drinkId === drinkId);
+
+    if (existing) {
+        if (existing.quantity + qty > drink.stock) {
+            alert(`إجمالي الكمية المطلوبة أكبر من المتاح من ${drink.name}`);
+            return;
+        }
+
+        existing.quantity += qty;
+        existing.totalPrice = existing.quantity * existing.price;
+    } else {
+        quickDrinksCart.push({
+            drinkId: drink.id,
+            name: drink.name,
+            price: Number(drink.price),
+            quantity: qty,
+            totalPrice: Number(drink.price) * qty
+        });
+    }
+
+    qtyInput.value = 1;
+    renderQuickDrinksCart();
+}
+
+
+function removeQuickDrink(drinkId) {
+    quickDrinksCart = quickDrinksCart.filter(item => item.drinkId !== drinkId);
+    renderQuickDrinksCart();
+}
+
+
+function getQuickDrinksTotal() {
+    return quickDrinksCart.reduce((sum, item) => sum + item.totalPrice, 0);
+}
+
+
+function renderQuickDrinksCart() {
+    const list = document.getElementById("quickDrinksList");
+    const totalEl = document.getElementById("quickDrinksTotal");
+
+    if (!list || !totalEl) return;
+
+    if (!quickDrinksCart.length) {
+        list.innerHTML = `<p class="meta">لا يوجد طلبات مشروبات حالياً</p>`;
+        totalEl.innerText = "0";
+        renderQuickDrinksOptions();
+        return;
+    }
+
+    list.innerHTML = quickDrinksCart.map(item => `
+    <div class="quick-item">
+      <div>
+        <strong>${item.name}</strong>
+        <div class="muted">العدد: ${item.quantity} × ${item.price} جنيه</div>
+      </div>
+
+      <div class="small-actions">
+        <span><strong>${item.totalPrice} جنيه</strong></span>
+        <button class="danger" onclick="removeQuickDrink(${item.drinkId})">حذف</button>
+      </div>
+    </div>
+  `).join("");
+
+    totalEl.innerText = getQuickDrinksTotal();
+    renderQuickDrinksOptions();
+}
+
+function clearQuickDrinksCart() {
+    quickDrinksCart = [];
+    renderQuickDrinksCart();
+}
+
+function confirmQuickDrinksSale() {
+    if (!quickDrinksCart.length) return;
+
+    for (let item of quickDrinksCart) {
+        const originalDrink = drinksList.find(d => d.id === item.drinkId);
+
+        if (!originalDrink || originalDrink.stock < item.quantity) {
+            alert(`المخزون غير كافٍ للمشروب: ${item.name}`);
+            return;
+        }
+    }
+
+    quickDrinksCart.forEach(item => {
+        const originalDrink = drinksList.find(d => d.id === item.drinkId);
+        originalDrink.stock -= item.quantity;
+
+        sessionsHistory.unshift({
+            deviceName: "-",
+            deviceType: "-",
+            category: "مشروب خارجي",
+            from: Date.now(),
+            to: Date.now(),
+            durationMs: 0,
+            amount: item.totalPrice,
+            details: `${item.name} × ${item.quantity}`
+        });
+    });
+
+    total += getQuickDrinksTotal();
+
+    quickDrinksCart = [];
+    saveAll();
+    renderTotal();
+    renderHistory();
+    renderQuickDrinksCart();
+    renderDevices();
+}
+
+
 function renderHistory() {
     const body = document.getElementById("historyBody");
     body.innerHTML = "";
@@ -650,7 +805,10 @@ function resetDay() {
     renderDevices();
 }
 
+
 renderTotal();
 renderHistory();
 renderDevices();
+renderQuickDrinksOptions();
+renderQuickDrinksCart();
 setInterval(updateLiveData, 1000);

@@ -26,6 +26,39 @@
   </section>
 
   <section class="panel">
+    <h2>🧃 مبيعات مشروبات مستقلة</h2>
+
+    <div class="settings-grid">
+      <div class="field">
+        <label for="quickDrinkSelect">المشروب</label>
+        <select id="quickDrinkSelect"></select>
+      </div>
+
+      <div class="field">
+        <label for="quickDrinkQty">العدد</label>
+        <input id="quickDrinkQty" type="number" min="1" value="1">
+      </div>
+
+      <div class="field field-button">
+        <label>&nbsp;</label>
+        <button class="primary" onclick="addQuickDrink()">إضافة للطلب</button>
+      </div>
+    </div>
+
+    <div id="quickDrinksList" class="quick-list"></div>
+
+    <div class="quick-total-box">
+      <p>إجمالي الطلب: <strong><span id="quickDrinksTotal">0</span> جنيه</strong></p>
+
+      <div class="small-actions">
+        <button class="success" onclick="confirmQuickDrinksSale()">تأكيد البيع</button>
+        <button class="gray" onclick="clearQuickDrinksCart()">إلغاء الطلب</button>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="panel">
     <h2>📋 سجل الجلسات</h2>
     <div class="table-wrapper">
       <table>
